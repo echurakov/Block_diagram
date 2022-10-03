@@ -1,8 +1,9 @@
 from PyQt5 import * 
-from PyQt5.QtWidgets import *
+from PyQt6.QtWidgets import *
 import sys
-from PyQt5 import QtWidgets , QtCore
-from PyQt5.QtGui import QPixmap
+from PyQt6 import QtWidgets, QtCore
+from PyQt6.QtGui import QPixmap
+
 
 
 class Begin(QtWidgets.QWidget):
@@ -82,7 +83,7 @@ class Action(QtWidgets.QWidget):
         super().__init__(parent)
         self.setWindowTitle("Action")
         self.text = ""
-        self.node_parents = []
+        self.node_parents = node_parents
         self.node_child = ""
         self.label = QLabel(self.text, self)
         self.pic = QLabel("Action", self)
@@ -106,7 +107,7 @@ class Action(QtWidgets.QWidget):
 
 
 class Cycle(QtWidgets.QWidget):
-    def __init__(self, parent=None, text="", node_child="", node_parents=[]):
+    def __init__(self, parent=None, text="", node_parents=[], node_child0="", node_child1=""):
         """
         Метод определяет блок "Цикл", его атрибуты: text - текстовое поле; 
         node_parent0, node_parent1 - для связи с предыдущими блоками (верхними, боковыми); 
@@ -133,12 +134,6 @@ class Cycle(QtWidgets.QWidget):
     def delete_parents(self, node_parents):
         self.node_parents.remove(node_parents)   
 
-    """ def set_parent0(self, node_parent0):
-        self.node_parent0 = node_parent0
-
-    def set_parent1(self, node_parent1):
-        self.node_parent1 = node_parent1
-    """
     def set_child0(self, node_child0):
         self.node_child0 = node_child0
 
@@ -171,16 +166,16 @@ class End(QtWidgets.QWidget):
     def delete_parents(self, node_parents):
         self.node_parents.remove(node_parents)   
 
-    def print_all_parents(self):
-        print(self.parent.text)
-        self.parent.print_all_parents()
+   # def print_all_parents(self):
+   #     print(self.parent.text)
+   #     self.parent.print_all_parents()
 
-#class MainWindow(QMainWindow):
-   # def __init__(self):
-        #super().__init__()
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
 
-      #  self.setWindowTitle("Блок-схема")
-       # self.setCentralWidget
+        self.setWindowTitle("Блок-схема")
+
 
 # class Pix(QWidget):
 #     def __init__(self, image_path, parent=None):
@@ -198,44 +193,44 @@ class End(QtWidgets.QWidget):
 if __name__ == "__main__":
         # QtCore.QCoreApplication.addLibraryPath("./")
         app = QApplication(sys.argv)
-        window = QMainWindow()
+        window = MainWindow()
         # window.show()
         # pic = Pix(sys.argv)/
         # pic.show()
 
-begin = Begin()
-begin.show()
-cond = Cond()
-action1 = Action()
-action2 = Action()
-cycle = Cycle()
-end = End()
-cond.show()
-# action1.show()
-# action2.show()
-cycle.show()
-end.show()
-begin.set_child(cond)
-cond.set_child0(action1)
-cond.set_child1(cycle)
-cond.add_parents(begin)
-action1.add_parents(cond)
-action1.set_child(action1)
-cycle.add_parents(cond)
-cycle.add_parents(action2)
-cycle.set_child0(action2)
-cycle.set_child1(end)
-action2.set_child(cycle)
-action2.add_parents(cycle)
-end.add_parents(cycle)
-end.add_parents(action1)
+        begin = Begin()
+        begin.show()
+        cond = Cond()
+        action1 = Action()
+        action2 = Action()
+        cycle = Cycle()
+        end = End()
+        cond.show()
+        action1.show()
+        action2.show()
+        # cycle.show()
+        end.show()
+        begin.set_child(cond)
+        cond.set_child0(action1)
+        cond.set_child1(cycle)
+        cond.add_parents(begin)
+        action1.add_parents(cond)
+        action1.set_child(action1)
+        cycle.add_parents(cond)
+        cycle.add_parents(action2)
+        cycle.set_child0(action2)
+        cycle.set_child1(end)
+        action2.set_child(cycle)
+        action2.add_parents(cycle)
+        end.add_parents(cycle)
+        end.add_parents(action1)
 
-begin.text = "Начало"
-cond.text = "14"
-action1.text = "Начать процесс дегидрации"
-action2.text = "Ничего не делать"
-end.text = "Конец"
+        begin.text = "Начало"
+        cond.text = "14"
+        action1.text = "Начать процесс дегидрации"
+        action2.text = "Ничего не делать"
+        end.text = "Конец"
 
 
-# widget.show()
-app.exec()
+        # widget.show()
+        app.exec()
